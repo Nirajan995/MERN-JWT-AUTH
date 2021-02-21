@@ -2,27 +2,36 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
-import postRoutes from "./routes/posts.js";
+import authRoutes from "./routes/UserRouter.js";
+import customerRoutes from "./routes/CustomerRouter.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
-app.use("/posts", postRoutes);
-
 app.use(cors());
+app.use(express.json());
+app.use(cookieParser());
 
 const CONNECTION_URL =
-  "mongodb+srv://broCode:broCode123@cluster0.1bdcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+  "mongodb+srv://broCode:broCode123@cluster0.q2sik.mongodb.net/dev?retryWrites=true&w=majority";
 
 const PORT = process.env.PORT || 5000;
 
-mongoose
-  .connect(CONNECTION_URL, {
+app.listen(PORT, () => console.log(`PORT running on ${PORT}`));
+
+mongoose.connect(
+  CONNECTION_URL,
+  {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-  })
-  .then(() =>
-    app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`))
-  )
-  .catch((error) => console.log(error));
+  },
+  (err) => {
+    if (err) return console.error(err);
+    console.log(`MongoDB connected succesfully`);
+  }
+);
 
 mongoose.set("useFindAndModify", false);
+
+app.use("/auth", authRoutes);
+app.use("/customer", customerRoutes);

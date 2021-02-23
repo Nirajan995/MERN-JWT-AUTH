@@ -16,5 +16,13 @@ router.post("/", auth, async (req, res) => {
     res.status(500).send();
   }
 });
-
+router.get("/", auth, async (req, res) => {
+  try {
+    const customers = await Customer.find();
+    res.json(customers);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send();
+  }
+});
 export default router;

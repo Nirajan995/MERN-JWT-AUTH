@@ -1,5 +1,4 @@
 import express from "express";
-import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import authRoutes from "./routes/UserRouter.js";
@@ -8,9 +7,13 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+  })
+);
 
 const CONNECTION_URL =
   "mongodb+srv://broCode:broCode123@cluster0.q2sik.mongodb.net/dev?retryWrites=true&w=majority";
